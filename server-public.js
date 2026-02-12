@@ -44,24 +44,25 @@ app.post("/api/generate-image", async (req, res) => {
     }
 
     const result = await openai.images.generate({
-  model: "gpt-image-1",
-  prompt,
-  size: "1024x1024",
-});
+      model: "gpt-image-1",
+      prompt,
+      size: "1024x1024",
+    });
 
     const imageUrl = result?.data?.[0]?.url;
     if (!imageUrl) {
       return res.status(500).json({ error: "No image returned" });
     }
 
-    res.json({ ok: true, imageUrl });
-} catch (err) {
-  console.error("generate-image error:", err?.response?.data || err);
-  return res.status(500).json({
-    ok: false,
-    error: err?.response?.data || err?.message || String(err),
-  });
+    return res.json({ ok: true, imageUrl });
+  } catch (err) {
+    console.error("generate-image error:", err?.response?.data || err);
+    return res.status(500).json({
+      ok: false,
+      error: err?.response?.data || err?.message || String(err),
+    });
   }
+});
 
 // --- 404 handler
 app.use((req, res) => {
