@@ -55,11 +55,13 @@ app.post("/api/generate-image", async (req, res) => {
     }
 
     res.json({ ok: true, imageUrl });
-  } catch (err) {
-    console.error("generate-image error:", err);
-    res.status(500).json({ ok: false, error: "Image generation failed" });
+} catch (err) {
+  console.error("generate-image error:", err?.response?.data || err);
+  return res.status(500).json({
+    ok: false,
+    error: err?.response?.data || err?.message || String(err),
+  });
   }
-});
 
 // --- 404 handler
 app.use((req, res) => {
