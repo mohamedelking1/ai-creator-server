@@ -32,6 +32,33 @@ app.get("/", (req, res) => {
   res.send("AI Creator Server Running 🚀");
 });
 
+// --- AI Image Generation
+app.post("/api/generate-image", async (req, res) => {
+  try {
+    const { prompt } = req.body;
+
+    if (!prompt || typeof prompt !== "string") {
+      return res.status(400).json({ error: "prompt is required" });
+    }
+
+    const result = await openai.images.generate({
+  model: "gpt-image-1",
+  prompt,
+  size: "1024x1024",
+});
+
+    const imageUrl = result?.data?.[0]?.url;
+    if (!imageUrl) {
+      return res.status(500).json({ error: "No image returned" });
+    }
+
+    res.json({ ok: true, imageUrl });
+  } catch (err) {
+    console.error("generate-image error:", err);
+    res.status(500).json({ ok: false, error: "Image generation failed" });
+  }
+});
+
 // --- 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: "Not Found", path: req.originalUrl });
