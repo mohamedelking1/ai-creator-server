@@ -7,6 +7,10 @@ const PORT = process.env.PORT || 3001;
 
 app.get("/ping", (req, res) => res.send("ok"));
 
+app.get("/", (req, res) => {
+  res.send("AI Creator Server Running 🚀");
+});
+
 app.listen(PORT, () => {
   console.log("Server running on port:", PORT);
 });
