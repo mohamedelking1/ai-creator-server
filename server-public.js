@@ -8,6 +8,8 @@ const openai = new OpenAI({
 
 const app = express();
 
+app.use(express.static("public"));
+
 // --- basics
 app.use(express.json({ limit: "2mb" }));
 
